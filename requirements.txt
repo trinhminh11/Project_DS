@@ -1,0 +1,16 @@
+apache-airflow==2.10.2
+apache-airflow-providers-postgres==5.9.0
+async-lru==2.0.5
+flask==2.2.5
+matplotlib==3.10.7
+pandas==2.2.3
+pdfkit==1.0.0
+scikit-learn==1.5.2
+scrapy==2.13.4
+seaborn==0.13.2
+xgboost==3.1.2
+selenium==4.25.0
+fake-useragent==1.5.1
+nvidia-nccl-cu12==2.23.4 # for xgboost GPU support
+pyyaml==6.0.3
+jupyter==1.1.1

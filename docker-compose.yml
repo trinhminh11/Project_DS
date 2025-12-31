@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  laptop-price-prediction:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laptop-price-prediction
+    ports:
+      - "${FLASK_PORT:-8000}:8000"      # Flask app
+      - "${AIRFLOW_PORT:-8080}:8080"    # Airflow webserver
+    volumes:
+      - ./app/temp:/app/temp:rw
+      - ./app/data_analysis/data:/app/data_analysis/data:rw
+      - ./app/data_analysis/results:/app/data_analysis/results:rw
+      - ./app/config.yml:/app/config.yml:rw
+      - ./app/logs:/app/logs:rw
+    environment:
+      - AIRFLOW_HOME=/app/airflow
+    restart: unless-stopped

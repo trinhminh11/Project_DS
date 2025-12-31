@@ -1,0 +1,22 @@
+main:
+  - gearvn
+  - cellphones
+  - fptshop
+  - hacom
+  - laptopaz
+  - laptopworld
+  - nguyenkim
+  - phongvu
+  - phucanh
+  - tgdd
+load_db:
+  - gearvn
+  - cellphones
+  - fptshop
+  - hacom
+  - laptopaz
+  - laptopworld
+  - nguyenkim
+  - phongvu
+  - phucanh
+  - tgdd

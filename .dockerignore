@@ -1,0 +1,9 @@
+.git
+.gitignore
+.devcontainer
+app/data_analysis/results
+app/data_analysis/data
+app/logs
+app/airflow/logs
+app/temp
+app/config.yml
