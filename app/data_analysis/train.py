@@ -118,6 +118,9 @@ def main():
     save_path = f"data_analysis/results/trained_models/{current_month}_{current_year}"
     os.makedirs(save_path, exist_ok=True)
 
+    # Data structure to hold evaluation results
+    eval_results_has_gpu = []
+
     if any(args.model == model for model in models.keys()):
         model = models[args.model]
         param_grid = param_grids[args.model]
@@ -135,10 +138,19 @@ def main():
         best_model_has_gpu = cv.best_estimator_
         results_has_gpu = cv.cv_results_
         joblib.dump(best_model_has_gpu, f"{save_path}/model_has_gpu.joblib")
-        # print('Score gaming: ', np.sqrt(-best_score_has_gpu))
+
+        # Save results for single model
+        eval_results_has_gpu.append({
+            "model": args.model,
+            "best_params": cv.best_params_,
+            "best_score": best_score_has_gpu,
+            "rmse": np.sqrt(-best_score_has_gpu)
+        })
 
     elif args.model == "all":
         best_score_has_gpu = float("-inf")
+        best_model_name_has_gpu = None
+
         for model_name, model in models.items():
             param_grid = param_grids[model_name]
             cv = GridSearchCV(
@@ -151,10 +163,19 @@ def main():
 
             cv.fit(X_has_gpu_train, y_has_gpu_train)
 
+            # Collect results for this model
+            eval_results_has_gpu.append({
+                "model": model_name,
+                "best_params": cv.best_params_,
+                "best_score": cv.best_score_,
+                "rmse": np.sqrt(-cv.best_score_)
+            })
+
             if cv.best_score_ > best_score_has_gpu:
                 best_score_has_gpu = cv.best_score_
                 best_model = cv.best_estimator_
                 results_has_gpu = cv.cv_results_
+                best_model_name_has_gpu = model_name
 
                 joblib.dump(best_model, f"{save_path}/model_has_gpu.joblib")
 
@@ -184,6 +205,8 @@ def main():
         X_no_gpu, y_no_gpu, test_size=0.2, random_state=42
     )
 
+    eval_results_no_gpu = []
+
     if any(args.model == model for model in models.keys()):
         model = models[args.model]
         param_grid = param_grids[args.model]
@@ -204,8 +227,17 @@ def main():
         joblib.dump(best_model_no_gpu, f"{save_path}/model_no_gpu.joblib")
         # print('Score no_gpu: ', np.sqrt(-best_score_no_gpu))
 
+        eval_results_no_gpu.append({
+            "model": args.model,
+            "best_params": cv.best_params_,
+            "best_score": best_score_no_gpu,
+            "rmse": np.sqrt(-best_score_no_gpu)
+        })
+
     elif args.model == "all":
         best_score_no_gpu = float("-inf")
+        best_model_name_no_gpu = None
+
         for model_name, model in models.items():
             param_grid = param_grids[model_name]
             cv = GridSearchCV(
@@ -218,10 +250,18 @@ def main():
 
             cv.fit(X_no_gpu_train, y_no_gpu_train)
 
+            eval_results_no_gpu.append({
+                "model": model_name,
+                "best_params": cv.best_params_,
+                "best_score": cv.best_score_,
+                "rmse": np.sqrt(-cv.best_score_)
+            })
+
             if cv.best_score_ > best_score_no_gpu:
                 best_score_no_gpu = cv.best_score_
                 best_model = cv.best_estimator_
                 results_no_gpu = cv.cv_results_
+                best_model_name_no_gpu = model_name
 
                 joblib.dump(best_model, f"{save_path}/model_no_gpu.joblib")
 
@@ -243,6 +283,23 @@ def main():
 
     with open(f"{save_path}/cv_results_no_gpu.json", "w") as f:
         json.dump(results_no_gpu, f, indent=4, default=str)
+
+    # Save evaluation summary to JSON
+    eval_summary_has_gpu = {
+        "best_model": best_model_name_has_gpu if args.model == "all" else args.model,
+        "results": eval_results_has_gpu
+    }
+
+    with open(f"{save_path}/eval_has_gpu.json", "w") as f:
+        json.dump(eval_summary_has_gpu, f, indent=4, default=str)
+
+    eval_summary_no_gpu = {
+        "best_model": best_model_name_no_gpu if args.model == "all" else args.model,
+        "results": eval_results_no_gpu
+    }
+
+    with open(f"{save_path}/eval_no_gpu.json", "w") as f:
+        json.dump(eval_summary_no_gpu, f, indent=4, default=str)
 
 
 if __name__ == "__main__":

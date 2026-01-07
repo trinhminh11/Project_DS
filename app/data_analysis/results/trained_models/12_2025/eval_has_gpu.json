@@ -1,0 +1,82 @@
+{
+    "best_model": "graboost",
+    "results": [
+        {
+            "model": "mlp",
+            "best_params": {
+                "activation": "relu",
+                "alpha": 0.001,
+                "early_stopping": true,
+                "hidden_layer_sizes": [
+                    100,
+                    50,
+                    25
+                ],
+                "learning_rate": "constant",
+                "learning_rate_init": 0.1,
+                "max_iter": 200
+            },
+            "best_score": -101789122584650.31,
+            "rmse": 10089059.549068501
+        },
+        {
+            "model": "rf",
+            "best_params": {
+                "bootstrap": true,
+                "max_depth": 20,
+                "max_features": "log2",
+                "min_samples_leaf": 1,
+                "min_samples_split": 2,
+                "n_estimators": 100
+            },
+            "best_score": -27818480787002.1,
+            "rmse": 5274322.779940767
+        },
+        {
+            "model": "graboost",
+            "best_params": {
+                "learning_rate": 0.1,
+                "max_depth": 20,
+                "max_features": "sqrt",
+                "min_samples_leaf": 4,
+                "min_samples_split": 2,
+                "n_estimators": 100,
+                "subsample": 1.0
+            },
+            "best_score": -20655463478948.277,
+            "rmse": 4544828.212259323
+        },
+        {
+            "model": "adaboost",
+            "best_params": {
+                "learning_rate": 0.1,
+                "n_estimators": 100
+            },
+            "best_score": -42555628250689.58,
+            "rmse": 6523467.50207967
+        },
+        {
+            "model": "xgboost",
+            "best_params": {
+                "colsample_bytree": 0.6,
+                "gamma": 0,
+                "learning_rate": 1,
+                "max_depth": 30,
+                "n_estimators": 50,
+                "reg_alpha": 0,
+                "reg_lambda": 1,
+                "subsample": 1.0
+            },
+            "best_score": -37388884780508.94,
+            "rmse": 6114645.10666882
+        },
+        {
+            "model": "bagging",
+            "best_params": {
+                "n_estimators": 100
+            },
+            "best_score": -30790642149396.605,
+            "rmse": 5548931.62233926
+        }
+    ]
+}
